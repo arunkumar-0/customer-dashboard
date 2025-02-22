@@ -1,9 +1,12 @@
 const express = require("express");
-const User = require("../models/User").default;
+const User = require("../models/User");
 
 const router = express.Router();
-
-// Mock AI churn prediction
+//Churn Risk Categories
+//High Risk (Most likely to churn)
+//Medium Risk (Moderate chance of churn)
+//Low Risk (Active users, less likely to churn)
+// AI churn prediction
 const predictChurn = (user) => {
   if (user.engagementScore < 40 && new Date() - new Date(user.lastLogin) > 30 * 24 * 60 * 60 * 1000) {
     return "High";
@@ -13,7 +16,7 @@ const predictChurn = (user) => {
   return "Low";
 };
 
-// Get churn predictions
+//  churn predictions
 router.get("/", async (req, res) => {
   try {
     const users = await User.find();

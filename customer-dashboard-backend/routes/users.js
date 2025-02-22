@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 const router = express.Router();
 
-// Get all users
+
 router.get("/", async (req, res) => {
   try {
     const users = await User.find();
@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Function to calculate engagement score (Example: Based on last login)
+// calculate engagement score 
 const calculateEngagementScore = (lastLogin) => {
     const daysSinceLogin = (Date.now() - new Date(lastLogin)) / (1000 * 60 * 60 * 24);
     if (daysSinceLogin < 3) return 90;
@@ -21,7 +21,7 @@ const calculateEngagementScore = (lastLogin) => {
     return 30;
   };
   
-  // Get users with calculated engagement score
+  //  users with calculated engagement score
   router.get("/", async (req, res) => {
     try {
       const users = await User.find();
