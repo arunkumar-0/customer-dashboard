@@ -5,7 +5,7 @@ export default function UserTable({ users }) {
   const [minEngagement, setMinEngagement] = useState("");
   const [retentionFilter, setRetentionFilter] = useState("");
 
-  // Filter users based on search & filters
+  //  users based on search & filters
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -25,7 +25,7 @@ export default function UserTable({ users }) {
     <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-4">User Activity</h2>
 
-      {/* Filters */}
+     
       <div className="flex flex-col md:flex-row md:space-x-4 space-y-3 md:space-y-0 mb-4">
         <input
           type="text"
@@ -55,7 +55,7 @@ export default function UserTable({ users }) {
         </select>
       </div>
 
-      {/* Table */}
+    
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200">
           <thead className="bg-blue-500 text-white">

@@ -6,7 +6,7 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
+ 
       <aside className={`bg-blue-900 text-white p-6 transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-20"} hidden md:block`}>
         <h2 className="text-2xl font-bold mb-6">{isSidebarOpen ? "Dashboard" : "DB"}</h2>
         <nav>
@@ -18,9 +18,9 @@ export default function Layout({ children }) {
         </nav>
       </aside>
 
-      {/* Main Content */}
+  
       <div className="flex-1 flex flex-col">
-        {/* Top Bar */}
+       
         <header className="bg-white shadow-md p-4 flex justify-between items-center">
           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-gray-600 text-xl">
             <FiMenu />
@@ -38,7 +38,7 @@ export default function Layout({ children }) {
           </div>
         </header>
 
-        {/* Content */}
+      
         <main className="p-6 flex-1">{children}</main>
       </div>
     </div>

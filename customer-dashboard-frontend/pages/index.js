@@ -6,7 +6,6 @@ import AIInsights from "../components/aIInsights";
 import EngagementChart from "../components/EngagementChart";
 import Layout from "../components/Layout";
 
-
 export default function Dashboard() {
   const [metrics, setMetrics] = useState(null);
   const [users, setUsers] = useState([]);
@@ -14,50 +13,58 @@ export default function Dashboard() {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/metrics").then((res) => {
-      setMetrics(res.data);
-      console.log("Metrics Data:", res.data);
-      // Prepare mock data for the chart, including retention
-      setChartData([
-        { date: "Day 1", dailyActive: res.data.dailyActive, weeklyActive: res.data.weeklyActive, monthlyActive: res.data.monthlyActive, retention: res.data.retention },
-        { date: "Day 2", dailyActive: res.data.dailyActive - 5, weeklyActive: res.data.weeklyActive - 10, monthlyActive: res.data.monthlyActive - 20, retention: res.data.retention - 2 },
-        { date: "Day 3", dailyActive: res.data.dailyActive + 2, weeklyActive: res.data.weeklyActive - 5, monthlyActive: res.data.monthlyActive - 15, retention: res.data.retention + 1 },
-        { date: "Day 4", dailyActive: res.data.dailyActive + 8, weeklyActive: res.data.weeklyActive - 3, monthlyActive: res.data.monthlyActive - 10, retention: res.data.retention + 3 },
-      ]);
-    });
+    axios.get("http://localhost:5000/metrics")
+      .then((res) => {
+        setMetrics(res.data);
+        console.log("Metrics Data:", res.data);
   
-    axios.get("http://localhost:5000/users").then((res) => setUsers(res.data));
-    axios.get("http://localhost:5000/predictions").then((res) => setPredictions(res.data));
+        const { dailyActive, weeklyActive, monthlyActive, retentionRate } = res.data;
+  
+        // data dynamically for the last 30 days
+        const days = 30;
+        const dynamicChartData = Array.from({ length: days }, (_, i) => ({
+          date: `Day ${i + 1}`,
+          dailyActive: Math.max(dailyActive - i % 5, 0),
+          weeklyActive: Math.max(weeklyActive - (i % 7), 0),
+          monthlyActive: Math.max(monthlyActive - (i % 10), 0),
+          retention: Math.max(retentionRate - i % 3, 0),
+        }));
+  
+        setChartData(dynamicChartData);
+      })
+      .catch((err) => console.error("Error fetching metrics:", err));
+  
+    axios.get("http://localhost:5000/users")
+      .then((res) => setUsers(res.data))
+      .catch((err) => console.error("Error fetching users:", err));
+  
+    axios.get("http://localhost:5000/predictions")
+      .then((res) => setPredictions(res.data))
+      .catch((err) => console.error("Error fetching predictions:", err));
   }, []);
   
-
   return (
     <Layout>
       <div className="space-y-6">
-        {/* Dashboard Header */}
         <h1 className="text-3xl font-bold text-gray-800">Customer Engagement Dashboard</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-  {/* Metrics Section */}
-  {metrics && <MetricsCard metrics={metrics} />}
-</div>
+          {metrics && <MetricsCard metrics={metrics} />}
+        </div>
 
-{/* Engagement Chart */}
-<div className="bg-white shadow-md rounded-lg p-6">
-  <h2 className="text-lg font-semibold mb-4">User Engagement Trends</h2>
-  <EngagementChart data={chartData} />
-</div>
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-lg font-semibold mb-4">User Engagement Trends</h2>
+          <EngagementChart data={chartData} />
+        </div>
 
-{/* User Table */}
-<div className="bg-white shadow-md rounded-lg p-6">
-  <UserTable users={users} />
-</div>
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <UserTable users={users} />
+        </div>
 
-{/* AI Insights */}
-<div className="bg-white shadow-md rounded-lg p-6">
-  <AIInsights predictions={predictions} />
-</div>
-</div>
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <AIInsights predictions={predictions} />
+        </div>
+      </div>
     </Layout>
   );
 }
