@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
   email: String,
   lastLogin: Date,
   engagementScore: Number,
-  retentionCategory: String, // High, Medium, Low
+  retentionCategory: String, 
 });
 
 module.exports = mongoose.model("User", UserSchema);

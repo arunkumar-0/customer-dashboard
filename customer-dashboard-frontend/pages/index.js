@@ -16,19 +16,20 @@ export default function Dashboard() {
   useEffect(() => {
     axios.get("http://localhost:5000/metrics").then((res) => {
       setMetrics(res.data);
-
-      // Prepare mock data for the chart
+      console.log("Metrics Data:", res.data);
+      // Prepare mock data for the chart, including retention
       setChartData([
-        { date: "Day 1", dailyActive: res.data.dailyActive, weeklyActive: res.data.weeklyActive, monthlyActive: res.data.monthlyActive },
-        { date: "Day 2", dailyActive: res.data.dailyActive - 5, weeklyActive: res.data.weeklyActive - 10, monthlyActive: res.data.monthlyActive - 20 },
-        { date: "Day 3", dailyActive: res.data.dailyActive + 2, weeklyActive: res.data.weeklyActive - 5, monthlyActive: res.data.monthlyActive - 15 },
-        { date: "Day 4", dailyActive: res.data.dailyActive + 8, weeklyActive: res.data.weeklyActive - 3, monthlyActive: res.data.monthlyActive - 10 },
+        { date: "Day 1", dailyActive: res.data.dailyActive, weeklyActive: res.data.weeklyActive, monthlyActive: res.data.monthlyActive, retention: res.data.retention },
+        { date: "Day 2", dailyActive: res.data.dailyActive - 5, weeklyActive: res.data.weeklyActive - 10, monthlyActive: res.data.monthlyActive - 20, retention: res.data.retention - 2 },
+        { date: "Day 3", dailyActive: res.data.dailyActive + 2, weeklyActive: res.data.weeklyActive - 5, monthlyActive: res.data.monthlyActive - 15, retention: res.data.retention + 1 },
+        { date: "Day 4", dailyActive: res.data.dailyActive + 8, weeklyActive: res.data.weeklyActive - 3, monthlyActive: res.data.monthlyActive - 10, retention: res.data.retention + 3 },
       ]);
     });
-
+  
     axios.get("http://localhost:5000/users").then((res) => setUsers(res.data));
     axios.get("http://localhost:5000/predictions").then((res) => setPredictions(res.data));
   }, []);
+  
 
   return (
     <Layout>
